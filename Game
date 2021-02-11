@@ -33,7 +33,7 @@ public class Game extends JPanel implements KeyListener, ActionListener{
 	private MapGenerator map;
 	
 	public Game () {
-		map = new MapGenerator (3, 7);
+		map = new MapGenerator (5, 8);
 		addKeyListener(this);
 		setFocusable(true);
 		setFocusTraversalKeysEnabled(false);
@@ -43,17 +43,17 @@ public class Game extends JPanel implements KeyListener, ActionListener{
 	
 	public void paint(Graphics g) {
 		//background color
-		g.setColor(Color.white);
+		g.setColor(Color.blue);
 		g.fillRect(1, 1, 692, 592);
 		
 		//draw map
 		map.draw((Graphics2D)g);
 		
 		// borders
-		g.setColor(Color.red);
-		g.fillRect(0, 0, 3, 592);
-		g.fillRect(0, 0, 692, 3);
-		g.fillRect(691, 0, 3, 592);
+		//g.setColor(Color.red);
+		//g.fillRect(0, 0, 3, 592);
+		//g.fillRect(0, 0, 692, 3);
+		//g.fillRect(691, 0, 3, 592);
 		
 		// scores
 		g.setColor(Color.black);
@@ -61,32 +61,35 @@ public class Game extends JPanel implements KeyListener, ActionListener{
 		g.drawString(" "+score, 590, 30);
 		
 		//paddle
-		g.setColor(Color.blue);
-		g.fillRect(playerX, 550, 100, 8);
+		g.setColor(Color.red);
+		g.fillRect(playerX, 550, 100, 10);
 		
 		//ball
 		g.setColor(Color.orange);
 		g.fillOval(ballPositionX, ballPositionY, 20, 20);
 		
+		//if you won game
 		if(totalBricks <= 0) {
 			play = false;
 			ballDirectionX = 0; 
 			ballDirectionY = 0;
-			g.setColor(Color.red);
+			g.setColor(Color.green);
 			g.setFont(new Font("serif", Font.BOLD, 30));
-			g.drawString("You Won!!, Scores: " , 190, 300);
+			g.drawString("You Won!!, Scores: " + score + "/200", 190, 300);
 			g.setFont(new Font("serif", Font.BOLD, 30));
 			g.drawString("Press Enter to Restart " , 230, 350);
 		}
 		
+		//if you lose game
 		if(ballPositionY > 570) {
 			play = false;
 			ballDirectionX = 0; 
 			ballDirectionY = 0;
 			g.setColor(Color.red);
 			g.setFont(new Font("serif", Font.BOLD, 30));
-			g.drawString("Game Over, Scores: " , 190, 300);
+			g.drawString("Game Over, Scores: " + score + "/200" , 190, 300);
 			g.setFont(new Font("serif", Font.BOLD, 30));
+			g.setColor(Color.green);
 			g.drawString("Press Enter to Restart " , 230, 350);
 		}
 		
@@ -157,6 +160,7 @@ public class Game extends JPanel implements KeyListener, ActionListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		//moves paddle to the right
 		if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			if(playerX >= 600) {
 				playerX =600;
@@ -164,6 +168,7 @@ public class Game extends JPanel implements KeyListener, ActionListener{
 				moveRight();
 			}
 		}
+		//moves paddle to the left
 		if(e.getKeyCode() == KeyEvent.VK_LEFT) {
 			if(playerX < 10) {
 				playerX = 10;
@@ -171,6 +176,7 @@ public class Game extends JPanel implements KeyListener, ActionListener{
 				moveLeft();
 			}
 		}
+		//restarts game if client presses enter key
 		if(e.getKeyCode()== KeyEvent.VK_ENTER) {
 			if(!play) {
 				play = true;
@@ -181,7 +187,7 @@ public class Game extends JPanel implements KeyListener, ActionListener{
 				playerX = 310;
 				score = 0;
 				totalBricks = 21;
-				map = new MapGenerator(3, 7);
+				map = new MapGenerator(5, 8);
 				
 				repaint();
 			}
